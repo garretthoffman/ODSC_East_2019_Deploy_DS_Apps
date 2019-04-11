@@ -9,7 +9,7 @@ import json
 sage = boto3.client('sagemaker-runtime')
 
 # defining the api-endpoint
-MODEL_ENDPOINT = "test-tf-chart-cv-2019-04-11-15-19-41-796"
+MODEL_ENDPOINT = "test-tf-chart-cv-2019-04-11-20-35-59-270"
 
 # taking input image via command line
 ap = argparse.ArgumentParser()
