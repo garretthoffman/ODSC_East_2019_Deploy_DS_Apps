@@ -2,6 +2,9 @@ import sagemaker
 from sagemaker.tensorflow import TensorFlow
 import json
 
+# define sagemaker execution role
+role = 'AmazonSageMaker-ExecutionRole-20181205T225138'
+
 # define S3 locations for data inputs
 s3_prefix = 'tf-chart-cv'
 
@@ -24,7 +27,7 @@ estimator = TensorFlow(entry_point='train.py',
                        train_instance_type=train_instance_type,
                        train_instance_count=1,
                        hyperparameters=hyperparameters,
-                       role='AmazonSageMaker-ExecutionRole-20181205T225138',
+                       role=role,
                        base_job_name='test-tf-chart-cv',
                        framework_version='1.12.0',
                        py_version='py3',
