@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: follow-rec-job
+  namespace: datascience
+spec:
+  schedule: "0 8 * * *"
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: follow-rec-job
+            image: 455897087921.dkr.ecr.us-east-1.amazonaws.com/follow-rec-job:latest
+            imagePullPolicy: IfNotPresent
+            resources:
+              requests:
+                memory: 4Gi
+                cpu: 0.1
+              limits:
+                  memory: 16Gi
+                  cpu: 1.0
+          restartPolicy: OnFailure
