@@ -1,0 +1,15 @@
+CREATE OR REPLACE STREAM "DESTINATION_SQL_STREAM" (
+    period_ending TIMESTAMP,
+    symbol VARCHAR(4), 
+    bull_score DOUBLE,
+    bear_score DOUBLE);
+
+CREATE OR REPLACE PUMP "STREAM_PUMP" AS 
+  INSERT INTO "DESTINATION_SQL_STREAM" 
+    SELECT STREAM
+      STEP("SOURCE_SQL_STREAM_001".ROWTIME BY INTERVAL '60' SECOND) + INTERVAL '1' MINUTE AS period_ending,
+      "symbol" AS symbol,
+      SUM("bull_score") AS bull_Score,
+      SUM("bear_score") AS bear_score
+    FROM     "SOURCE_SQL_STREAM_001"
+    GROUP BY "symbol", STEP("SOURCE_SQL_STREAM_001".ROWTIME BY INTERVAL '60' SECOND);
