@@ -50,12 +50,12 @@ def generate_sample_data(event, context):
         print("Error: Issue creating users table")
         print (e)
 
-    # generate data for 5 minutes and write it to postgress
+    # generate data for 10 minutes and write it to postgress
     t0 = dt.datetime.utcnow()
     t1 = dt.datetime.utcnow()
     seconds_elapsed =  (t1 - t0).total_seconds()
     message_id = 0
-    while seconds_elapsed < 300:
+    while seconds_elapsed < 600:
         created_at = dt.datetime.utcnow()
         message_id += 1
         symbol = generate_symbol()
