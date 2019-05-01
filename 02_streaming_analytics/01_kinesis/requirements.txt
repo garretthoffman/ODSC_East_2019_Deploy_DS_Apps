@@ -1,0 +1,4 @@
+boto3==1.9.139
+numpy==1.16.3
+pandas==0.24.2
+psycopg2==2.8.2

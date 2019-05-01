@@ -297,7 +297,7 @@ Resources:
           IntervalInSeconds: 60
           SizeInMBs: 1
         CompressionFormat: UNCOMPRESSED
-        Prefix: MinutelyAgg
+        Prefix: MinutelyAgg/
         RoleARN: !GetAtt KinesisDeliveryRole.Arn
 
   KinesisDeliveryRole:

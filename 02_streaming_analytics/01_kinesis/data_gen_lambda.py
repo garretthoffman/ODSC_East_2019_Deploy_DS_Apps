@@ -10,13 +10,13 @@ def generate_sample_data(event, context):
 
     # Open kinesis client and define stream name
     client = boto3.client('kinesis')
-    STREAM_NAME = "stream_demo"
+    STREAM_NAME = "st-sentiment-demo-stream"
 
     # Grab config
-    HOST = os.environ.get('DB_HOST') or "127.0.0.1"
-    DB_NAME = os.environ.get('DB_NAME') or "st_lite"
-    USER = os.environ.get('DB_USER') or "GarrettHoffman"
-    PASSWORD = os.environ.get('DB_PASSWORD') or ""
+    HOST = os.environ.get('DB_HOST') or "st-deploy-ds-apps-db.crm2jldobavl.us-east-1.rds.amazonaws.com"
+    DB_NAME = os.environ.get('DB_NAME') or "stdemo"
+    USER = os.environ.get('DB_USER') or "odsc"
+    PASSWORD = os.environ.get('DB_PASSWORD') or "password"
 
     # define our universe of symbols
     SYMBOLS = ["FB", "AMZN", "AAPL", "NFLX", "GOOG"]
@@ -69,7 +69,7 @@ def generate_sample_data(event, context):
 
         print("Created At:", created_at, "Message Id:", message_id, "Symbol:", symbol, "Sentiment Score:", sent_score)
         try: 
-            cur.execute("INSERT INTO raw_sent_mini_batch (created_at, message_id, symbol, sent_score) VALUES (%s, %s, %s, %s)", \
+            cur.execute("INSERT INTO raw_sent_stream (created_at, message_id, symbol, sent_score) VALUES (%s, %s, %s, %s)", \
                         (created_at, message_id, symbol, sent_score))
         except psycopg2.Error as e: 
             print("Error: Inserting Row")
