@@ -1,0 +1,487 @@
+---
+Resources:
+  # resources for ML demos
+  # s3 bucket for sagemaker data
+  SagemakerDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName : st-sage-demo # add unique bucket name here
+      AccessControl: PublicReadWrite
+
+  # Sagemaker Service IAM roles
+  SagemakerServiceRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: sage-role
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: sagemaker.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+          PolicyName: sagemaker-full-access
+
+  # image repo for flask app docker image
+  MLFlaskAppImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "ml-api"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # resources for Batch Demos
+  # s3 bucket for sagemaker data
+  BatchProcessingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName : st-batch-demo # add unique bucket name here
+      AccessControl: PublicReadWrite
+
+  # publically accessible postgres db
+  BatchProcessingPostgresDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: st-deploy-ds-apps-db
+      DBName: stdemo
+      AllocatedStorage: '5'
+      DBInstanceClass: db.t2.micro
+      Engine: postgres
+      EngineVersion: '10.6'
+      MasterUsername: odsc
+      MasterUserPassword: password
+      PubliclyAccessible: true
+      VPCSecurityGroups:
+      - !GetAtt PostgresSecurityGroup.GroupId
+
+  # postgres security group
+  PostgresSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: postgres-security-group
+      GroupDescription: Access to Postgres
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 5432
+        ToPort: 5432
+        CidrIp: 0.0.0.0/0
+
+  # image repo for user rec batch job
+  FollowRecBatchJobImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "follow-rec-job"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for room rec batch job
+  RoomRecBatchJobImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "room-rec-job"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for DAG engagement etl task
+  GraphRecsDagEngagementETLImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "graph-recs-pipeline-engagement-etl"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for DAG closest connection task
+  GraphRecsDagClsCncImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "graph-recs-pipeline-closest-connect"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for DAG closest room rask
+  GraphRecsDagClsRoomImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "graph-recs-pipeline-closest-rooms"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for DAG follow rec task
+  GraphRecsDagFollowRecImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "graph-recs-pipeline-follow-rec"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # image repo for DAG room rec task
+  GraphRecsDagRoomRecImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "graph-recs-pipeline-room-rec"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  # resources for streaming demo
+  # s3 bucket for streaming data
+  StreamProcessingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName : st-stream-demo # add unique bucket name here
+      AccessControl: PublicReadWrite
+
+  # image repo for sentiment aggregation mini batch job
+  MiniBatchSentimentAggJobImageRepo: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: "agg-sent-minutely"
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - arn:aws:iam::777558474989:user/Garrett #insert your user ARN
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  KinesisInputStream: 
+    Type: AWS::Kinesis::Stream 
+    Properties: 
+      Name: st-sentiment-demo-stream 
+      ShardCount: 1
+
+  KinesisDeliveryStream: 
+   Type: AWS::KinesisFirehose::DeliveryStream
+   Properties: 
+      DeliveryStreamName: st-sentiment-demo-delivery-stream
+      DeliveryStreamType: DirectPut
+      S3DestinationConfiguration: 
+        BucketARN: !GetAtt StreamProcessingBucket.Arn
+        BufferingHints: 
+          IntervalInSeconds: 60
+          SizeInMBs: 1
+        CompressionFormat: UNCOMPRESSED
+        Prefix: MinutelyAgg
+        RoleARN: !GetAtt KinesisDeliveryRole.Arn
+
+  KinesisDeliveryRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: kinesis-delivery-role
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: firehose.amazonaws.com
+          Action: sts:AssumeRole
+          Condition:
+            StringEquals:
+              sts:ExternalId: !Ref AWS::AccountId
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+          PolicyName: delivery-stream-full-access
+
+  # lambda to preprocess sentiment score before streaming into analytics app
+  PreprocessSentimentLambda:
+    Type: AWS::Lambda::Function
+    Properties: 
+      Code:
+        ZipFile: |
+          import base64
+          import json
+
+          print('Loading function')
+
+          # define processing functions
+
+          def get_bull_score(sent_score):
+              if sent_score > 0:
+                  return sent_score
+              return 0
+
+          def get_bear_score(sent_score):
+              if sent_score < 0:
+                  return sent_score
+              return 0
+
+          def lambda_handler(event, context):
+              output = []
+
+              for record in event['records']:
+                  # get data from input data
+                  payload = base64.b64decode(record['data'])
+                  data = json.loads(payload)
+                  
+                  # Do custom processing on the record payload here
+                  created_at = data.get('created_at')
+                  symbol = data.get('symbol')
+                  sent_score = data.get('sent_score')
+                  
+                  bull_score = get_bull_score(sent_score)
+                  bear_score = get_bear_score(sent_score)
+
+                  payload = {
+                      'created_at': created_at,
+                      'symbol': symbol,
+                      'bull_score': bull_score,
+                      'bear_score': bear_score
+                  }
+              
+                  output_record = {
+                      'recordId': record['recordId'],
+                      'result': 'Ok',
+                      'data': base64.b64encode(json.dumps(payload).encode('utf-8')).decode('utf-8')
+                  }
+                  output.append(output_record)
+
+              print('Successfully processed {} records.'.format(len(event['records'])))
+              print({'records': output})
+              return {'records': output}
+      FunctionName: process-raw-sent-score
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.7
+      Timeout: 60
+
+  # Sagemaker Service IAM roles
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: process-raw-sent-score-lambda-role
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+          PolicyName: lambda-full-access
+  
+  KinesisStreamingApp:
+    Type: AWS::KinesisAnalytics::Application
+    Properties:
+      ApplicationName: "minutely-sentiment-streaming-app"
+      ApplicationCode: |
+        CREATE OR REPLACE STREAM "DESTINATION_SQL_STREAM" (
+          period_ending TIMESTAMP,
+          symbol VARCHAR(4), 
+          bull_score DOUBLE,
+          bear_score DOUBLE);
+
+        CREATE OR REPLACE PUMP "STREAM_PUMP" AS 
+          INSERT INTO "DESTINATION_SQL_STREAM" 
+            SELECT STREAM
+              STEP("SOURCE_SQL_STREAM_001".ROWTIME BY INTERVAL '60' SECOND) + INTERVAL '1' MINUTE AS period_ending,
+              "symbol" AS symbol,
+              SUM("bull_score") AS bull_Score,
+              SUM("bear_score") AS bear_score
+            FROM  "SOURCE_SQL_STREAM_001"
+            GROUP BY "symbol", STEP("SOURCE_SQL_STREAM_001".ROWTIME BY INTERVAL '60' SECOND);
+      Inputs:
+        - NamePrefix: "SOURCE_SQL_STREAM"
+          InputSchema:
+            RecordColumns:
+              - Name: "created_at"
+                SqlType: "VARCHAR(16)"
+                Mapping: "$.created_at"
+              - Name: "symbol"
+                SqlType: "VARCHAR(16)"
+                Mapping: "$.symbol"
+              - Name: "bull_score"
+                SqlType: "DOUBLE"
+                Mapping: "$.bull_score"
+              - Name: "bear_score"
+                SqlType: "DOUBLE"
+                Mapping: "$.bear_score"
+            RecordFormat:
+              RecordFormatType: "JSON"
+              MappingParameters:
+                JSONMappingParameters:
+                  RecordRowPath: "$"
+          KinesisStreamsInput:
+            ResourceARN: !GetAtt KinesisInputStream.Arn
+            RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+          InputProcessingConfiguration: 
+            InputLambdaProcessor:
+              ResourceARN: !GetAtt PreprocessSentimentLambda.Arn
+              RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+              
+  KinesisAnalyticsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: kinesisanalytics.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+          PolicyName: kinesis-analytics-full-access
+
+  KinesisStreamingAppOutput:
+    Type: AWS::KinesisAnalytics::ApplicationOutput
+    Properties:
+      ApplicationName: !Ref KinesisStreamingApp
+      Output:
+        Name: "DESTINATION_SQL_STREAM"
+        DestinationSchema:
+          RecordFormatType: "CSV"
+        KinesisFirehoseOutput:
+          ResourceARN: !GetAtt KinesisDeliveryStream.Arn
+          RoleARN: !GetAtt KinesisAnalyticsRole.Arn
