@@ -3,4 +3,6 @@ Slides and Code Samples for ODSC East 2019 Talk on Deploying Data Science Applic
 
 ## Notes
 
-This repo contains all of the application code used for the tutorial but instructions on seting up infrastructure and running the code are still a work in progress. I will be pushing these updates in the next few weeks.
+**IMPORTANT** - This repo contains all of the application code used for the tutorial but instructions on seting up infrastructure and running the code are still a work in progress. I will be pushing these updates in the next few weeks. Follow me on Twitter at @GarrettLeeH to stay updated.
+
+
