@@ -6,10 +6,10 @@ import os
 def generate_sample_data(event, context):
 
     # Grab config
-    HOST = os.environ.get('DB_HOST') or "127.0.0.1"
-    DB_NAME = os.environ.get('DB_NAME') or "st_lite"
-    USER = os.environ.get('DB_USER') or "GarrettHoffman"
-    PASSWORD = os.environ.get('DB_PASSWORD') or ""
+    HOST = os.environ.get('DB_HOST') or "st-deploy-ds-apps-db.cypzti2esilk.us-east-1.rds.amazonaws.com"
+    DB_NAME = os.environ.get('DB_NAME') or "stdemo"
+    USER = os.environ.get('DB_USER') or "odsc"
+    PASSWORD = os.environ.get('DB_PASSWORD') or "password"
 
     # Need to create mock data for user and room recommendation tasks
     # Need to create User, Room, Message Objects and Follow, Subscribes, 

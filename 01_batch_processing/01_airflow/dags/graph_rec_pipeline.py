@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 
 # Define Global Var for image prefix. This is the URL of our image repository
-IMG_PREFIX = "455897087921.dkr.ecr.us-east-1.amazonaws.com/"
+IMG_PREFIX = "161833574765.dkr.ecr.us-east-1.amazonaws.com/"
 
 # define K8sPodOpperator Taks Creator helper functions
 def get_task_image(dag, task_name):
@@ -14,7 +14,7 @@ def get_task_image(dag, task_name):
 def create_k8s_pod_opperator_task(task_name, dag):
     task = KubernetesPodOperator(namespace='default',
                                 image=get_task_image(dag, task_name),
-                                mage_pull_policy='Always',
+                                image_pull_policy='Always',
                                 task_id=task_name,
                                 name=task_name,  
                                 is_delete_operator_pod=True,
@@ -35,7 +35,7 @@ default_args = {
 }
 
 # define our dag
-dag = DAG('graph-recs-pipeline', default_args=default_args, schedule_interval='0 8 * * *') engagement_etl
+dag = DAG('graph-recs-pipeline', default_args=default_args, schedule_interval='0 8 * * *')
 
 # define our tasks
 engagement_etl = create_k8s_pod_opperator_task('engagement-etl', dag)

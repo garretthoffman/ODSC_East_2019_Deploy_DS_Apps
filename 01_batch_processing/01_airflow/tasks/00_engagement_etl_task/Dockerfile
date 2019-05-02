@@ -1,6 +1,12 @@
 FROM python:3.6-slim
 LABEL maintainer Garrett Hoffman <garrett@stocktwits.com>
 
+RUN apt-get update && apt-get install -y \
+    libpq-dev \ 
+    python3-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p /src/
 WORKDIR /src
 

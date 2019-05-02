@@ -4,7 +4,7 @@ from io import StringIO
 import os
 
 # Define global config S3  output
-S3_BUCKET = 'recs-demo'
+S3_BUCKET = 'st-batch-demo'
 S3_DATA_PATH = 'airflow/today/data/' 
 ROOM_ENG_FILE = "user_to_room_engagements.csv"
 CLS_ROOM_FILE = "room_closest_connections.csv"

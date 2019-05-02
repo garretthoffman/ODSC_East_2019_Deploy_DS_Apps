@@ -7,10 +7,10 @@ import boto3
 import os
 
 # Define psql config
-HOST = os.environ.get('DB_HOST') or "127.0.0.1"
-DB_NAME = os.environ.get('DB_NAME') or "st_lite"
-USER = os.environ.get('DB_USER') or "GarrettHoffman"
-PASSWORD = os.environ.get('DB_PASSWORD') or ""
+HOST = os.environ.get('DB_HOST') or "st-deploy-ds-apps-db.cypzti2esilk.us-east-1.rds.amazonaws.com"
+DB_NAME = os.environ.get('DB_NAME') or "stdemo"
+USER = os.environ.get('DB_USER') or "odsc"
+PASSWORD = os.environ.get('DB_PASSWORD') or "password"
 
 # Define date ranges for analysis, we won't actually use this but this would be set to limit the engagements
 # that we are analyzing
@@ -18,7 +18,7 @@ LAST_DATE = "yesterday"
 CURRENT_TIME = "today"
 
 # Define global config S3  output
-S3_BUCKET = 'recs-demo'
+S3_BUCKET = 'st-batch-demo'
 S3_PATH = 'cron/user/today' 
 RES_FILE_NAME = "follow_recs.csv"
 

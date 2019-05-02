@@ -13,8 +13,8 @@ spec:
         spec:
           containers:
           - name: follow-rec-job
-            image: 455897087921.dkr.ecr.us-east-1.amazonaws.com/follow-rec-job:latest
-            imagePullPolicy: IfNotPresent
+            image: 161833574765.dkr.ecr.us-east-1.amazonaws.com/follow-rec-job:latest
+            imagePullPolicy: Always
             resources:
               requests:
                 memory: 4Gi

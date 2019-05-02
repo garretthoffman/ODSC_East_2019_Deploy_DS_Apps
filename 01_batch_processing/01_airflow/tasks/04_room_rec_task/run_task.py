@@ -11,7 +11,7 @@ LAST_DATE = "yesterday"
 CURRENT_TIME = "today"
 
 # Define global config S3  output
-S3_BUCKET = 'recs-demo'
+S3_BUCKET = 'st-batch-demo'
 S3_DATA_PATH = 'airflow/today/data/' 
 CLS_CNC_FILE = "user_closest_connections.csv"
 CLS_ROOM_FILE = "room_closest_connections.csv"
