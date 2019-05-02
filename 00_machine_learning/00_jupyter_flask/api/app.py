@@ -22,6 +22,12 @@ def decode_image(b64img):
     return img
 
 ############################## Define Routes ##############################
+# this is a health check endpoint that is hit periodically by our infra to test the
+# app is still healthy
+@app.route('/health', methods=['GET'])
+def health_check():    
+    data = {"health_check": "healthy"}
+    return make_response(data, 200)
 
 @app.route('/chart_classifier/predict', methods=['POST'])
 def predict():

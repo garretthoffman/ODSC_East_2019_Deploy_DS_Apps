@@ -3,10 +3,12 @@ from sagemaker.tensorflow import TensorFlow
 import json
 
 # define sagemaker execution role
-role = 'AmazonSageMaker-ExecutionRole-20181205T225138'
+# this is name of sagemaker role that was created by CFT
+role = 'sage-role'
 
 # define S3 locations for data inputs
-s3_prefix = 'tf-chart-cv'
+# this is name of sagemaker bucket that was created by CFT
+s3_prefix = 'st-sage-demo'
 
 train_data_s3_uri = f's3://{s3_prefix}/data/train'
 test_data_s3_uri = f's3://{s3_prefix}/data/test'

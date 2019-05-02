@@ -1,0 +1,49 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: datascience
+  name: ml-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      namespace: datascience
+      labels:
+        app: ml-api
+    spec:
+      containers:
+      - name: ml-api
+        livenessProbe: &probe
+          httpGet:
+            path: /health
+            port: 5000
+        readinessProbe: *probe
+        image: 161833574765.dkr.ecr.us-east-1.amazonaws.com/ml-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 0.1
+          limits:
+            memory: 1Gi
+            cpu: 0.5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-api-service
+  namespace: datascience
+  labels:
+    app: ml-api-service
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5000
+    nodePort: 32001
+  selector:
+    app: ml-api
