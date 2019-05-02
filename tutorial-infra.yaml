@@ -75,18 +75,20 @@ Resources:
       PubliclyAccessible: true
       VPCSecurityGroups:
       - !GetAtt PostgresSecurityGroup.GroupId
+      DBSubnetGroupName: airflow-demo-subnet-group
 
   # postgres security group
   PostgresSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: postgres-security-group
+      GroupName: psql-security-group
       GroupDescription: Access to Postgres
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: 5432
         ToPort: 5432
         CidrIp: 0.0.0.0/0
+      VpcId: vpc-cded14b7
 
   # image repo for user rec batch job
   FollowRecBatchJobImageRepo: 
@@ -254,7 +256,7 @@ Resources:
   StreamProcessingBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName : st-stream-demo # add unique bucket name here
+      BucketName : st-streaming-demo # add unique bucket name here
       AccessControl: PublicReadWrite
 
   # image repo for sentiment aggregation mini batch job
