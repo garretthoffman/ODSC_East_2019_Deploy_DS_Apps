@@ -3,7 +3,7 @@ import base64
 import requests
 
 # defining the api-endpoint
-API_ENDPOINT = "http://10.1.5.188:32001/chart_classifier/predict"
+API_ENDPOINT = "http://a65eff3536cd311e99e6e1690e200b1c-1510142545.us-east-1.elb.amazonaws.com:5000/chart_classifier/predict"
 
 # taking input image via command line
 ap = argparse.ArgumentParser()

@@ -39,11 +39,10 @@ metadata:
   labels:
     app: ml-api-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: http
     protocol: TCP
     port: 5000
-    nodePort: 32001
   selector:
     app: ml-api
