@@ -13,7 +13,7 @@ def generate_sample_data(event, context):
     STREAM_NAME = "st-sentiment-demo-stream"
 
     # Grab config
-    HOST = os.environ.get('DB_HOST') or "st-deploy-ds-apps-db.crm2jldobavl.us-east-1.rds.amazonaws.com"
+    HOST = os.environ.get('DB_HOST') or "st-deploy-ds-apps-db.cypzti2esilk.us-east-1.rds.amazonaws.com"
     DB_NAME = os.environ.get('DB_NAME') or "stdemo"
     USER = os.environ.get('DB_USER') or "odsc"
     PASSWORD = os.environ.get('DB_PASSWORD') or "password"

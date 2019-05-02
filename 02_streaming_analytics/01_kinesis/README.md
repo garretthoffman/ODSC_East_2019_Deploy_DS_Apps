@@ -21,7 +21,7 @@ Since all of the infra structure is deployed we just have to start our app and s
 HOST = os.environ.get('DB_HOST') or "<Your DB Host Name>"
 ```
 
-4. Create our virtual environment, activate it and install package dependencies TODO: 
+4. Create our virtual environment, activate it and install package dependencies: 
 
 ```
 conda env create -f environment.yml

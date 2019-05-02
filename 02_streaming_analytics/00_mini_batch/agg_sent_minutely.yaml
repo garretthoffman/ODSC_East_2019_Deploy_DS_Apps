@@ -13,8 +13,8 @@ spec:
         spec:
           containers:
           - name: agg-sent-minutely
-            image: 455897087921.dkr.ecr.us-east-1.amazonaws.com/agg-sent-minutely:latest
-            imagePullPolicy: IfNotPresent
+            image: 161833574765.dkr.ecr.us-east-1.amazonaws.com/agg-sent-minutely:latest
+            imagePullPolicy: Always
             resources:
               requests:
                 memory: 4Gi
